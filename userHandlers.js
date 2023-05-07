@@ -53,8 +53,8 @@ const updateUser = (req, res) => {
 
   database
     .query(
-      "UPDATE users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? WHERE id = ?",
-      [firstname, language, email, city, language, id]
+      "UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ? WHERE id = ?",
+      [firstname, lastname, email, city, language, id]
     )
     .then(([result]) => {
       if (result.affectedRows === 0) {
@@ -69,9 +69,22 @@ const updateUser = (req, res) => {
     });
 };
 
+const deleteUser = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  database.query("DELETE FROM users WHERE id = ?", [id]).then(([result]) => {
+    if (result.affectedRows === 0) {
+      res.status(404).send("Not Found");
+    } else {
+      res.sendStatus(204);
+    }
+  });
+};
+
 module.exports = {
   getUser,
   getUsersById,
   postUser,
   updateUser,
+  deleteUser,
 };
